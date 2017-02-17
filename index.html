@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Kamen Rider Gaim's Over Lord Inves Language Translator</title>
+    <meta charset="utf-8">
+    <meta name="keywords" content="KAMEN RIDER GAIM OVER LORD INVES OVERLORD OVERLORDESE OVERLORDPEAK TRANSLATOR HELHEIM LOCKSEED Æsir AESIR FANSUB オーバーロードインベス Ōbārōdo Inbesu">
+    <meta name="description" content="A translator for the Kamen Rider Gaim's Over Lord Inves Language as defined by ">
+    <style media="screen" type="text/css">
+    body {
+        background-color: linen;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h1 {
+        color: maroon;
+        margin: 10px;
+        padding: 0px;
+    }
+    p.credits {
+        color: darkgreen;
+        font-weight: 600;
+        margin: 0px;
+        padding: 0px;
+    }
+    #wraper
+    {
+        align-content: center;
+        margin: 10px;
+    }
+    #controls
+    {
+        color: darkgreen;
+        font-weight: 500;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: inline-block;
+        width: 100%;
+        display: inline-block;
+        align-content: center;
+    }
+    #stylecontrols
+    {
+        margin: 20px;
+        color: maroon;
+    }
+    #spacecontrols
+    {
+        margin: 20px;
+        color: green;
+    }
+    #maxLength
+    {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: bisque;
+        border-color: maroon;
+        border-bottom-style: solid;
+        border-width: thin;
+        display: inline-block;
+        font-weight: 400;
+        width: 50px;
+        font-size: 16px;
+        resize: none;
+        padding: 5px;
+    }
+    #textareas{
+        width: 70%;
+        align-self: center;
+        margin: 0 auto;
+    }    
+    #input
+    {
+        float: left;
+        width: 49.3%;
+    }
+    #output{
+        float: right;
+        width: 49.3%;
+    }
+    .textarea {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: bisque;
+        border-color: maroon;
+        border-bottom-style: solid;
+        border-width: thin;
+        width: 100%;
+        display: inline-block;
+        font-weight: 400;
+        font-size: 16px;
+        resize: none;
+    }
+    #convert{
+        background-color: forestgreen;
+        color: white;
+        font-size: 32px;
+        padding: 10px;
+        margin: 10px;
+        align-content: center;
+    }
+    </style>
+    <script type="text/javascript">
+    dict = {
+        A: "Y",
+        B: "K",
+        C: "R",
+        D: "T",
+        E: "O",
+        F: "S",
+        G: "P",
+        H: "L",
+        I: "U",
+        J: "Q",
+        K: "B",
+        L: "H",
+        M: "N",
+        N: "M",
+        O: "E",
+        P: "G",
+        Q: "J",
+        R: "C",
+        S: "F",
+        T: "D",
+        U: "I",
+        V: "W",
+        W: "V",
+        X: "Z",
+        Y: "A",
+        Z: "X"
+    }
+
+    function checkQuery() {
+        var q = decodeURIComponent(window.location.search);
+        var text = q.replace(/[?&]*text=(.+)[&]?/, "$1");
+        document.getElementById("in").value = text;
+        document.getElementById("out").innerHTML = doConvert(text);
+    }
+
+    function convert() {
+        var inp = document.getElementById("in").value;
+        document.getElementById("out").innerHTML = doConvert(inp);
+    }
+
+    function doConvert(stri) {
+        var o = "";
+        var maxLength = parseInt(document.getElementById("maxLength").value);
+        var count = 0;
+
+        var spaceOption;
+
+        if (document.getElementById("keepSpaces").checked) {
+            spaceOption = "keep";
+        }
+        else if (document.getElementById("noSpaces").checked) {
+            spaceOption = "none";
+        }
+        else {
+            spaceOption = "random";
+        }
+
+        var spaceCount = 0;
+        var spaceThreshold = 4;
+
+        var capsOption;
+
+        if (document.getElementById("shout").checked) {
+            capsOption = "shout";
+        }
+        else {
+            capsOption = "keep";
+        }
+
+        for (var i = 0; i < stri.length; i++) {
+            var chr = stri.charAt(i);
+            var upperC = chr.toUpperCase();
+
+            if (chr === " " && spaceOption === "keep") {
+                o += chr;
+            }
+            else if (chr === " " && spaceOption === "none") {
+                // This is an awkward way of doing this...
+            }
+            else {
+                if (typeof dict[upperC] !== 'undefined') {
+                    if (capsOption === "shout") {
+                        o += dict[upperC];
+                    }
+                    else {
+                        if (chr === upperC) 
+                            o += dict[upperC];
+                        else
+                            o += dict[upperC].toLowerCase();
+                    }
+                }
+                else
+                    o += chr;
+            }
+
+            count++;
+
+            if (count >= maxLength && maxLength > 0) {
+                o += "<br>";
+                count = 0;
+            }
+
+            if (spaceOption === "random") {
+                spaceCount++;
+
+                if (spaceCount >= spaceThreshold) {
+                    var r = Math.random();
+
+                    if (r >= 0.75) {
+                        o += " ";
+                        spaceCount = 0;
+                    }
+                }
+            }
+        }
+
+        return o;
+    }
+
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+
+        if (charCode > 31 && (charCode < 48 || charCode > 57)){
+            return false;
+        }
+        return true;
+    }
+    </script>
+</head>
+<body onload="checkQuery();">
+    <div id="wraper">
+        <div id="header">
+            <img src="./images/gaim_logo.png" alt="Kamen Rider Gaim's Logo"/>
+            <h1>Kamen Rider Gaim's Over Lord Inves Language Translator</h1>
+        </div>
+        <div id="textareas">
+            <div id="input">
+                <textarea class="textarea" cols="40" rows="10" id="in" placeholder="Your text in human language here."></textarea><br>
+            </div>
+            <div id="output">
+                <textarea class="textarea" cols="40" rows="10" id="out" placeholder="The overlordese will show up here."></textarea><br>
+                <!--<div id="out"></div>-->
+            </div>
+        </div>
+        <div id="controls">
+            Max line length (0 for unlimited): <input id="maxLength" type="text" value="0" onkeypress="return isNumberKey(event)">
+            <div id="stylecontrols">
+                <input id="keep" name="caps" type="radio" checked> Keep it as is<br>
+                <input id="shout" name="caps" type="radio"> SHOUT IT OUT LOUD!<br>
+            </div>
+            <div id="spacecontrols">
+                <input id="randomSpaces" name="spaces" type="radio" checked> <span title="Adds random spacing">Give me spaces!</span><br>
+                <input id="keepSpaces" name="spaces" type="radio"> <span title="Keeps the spacing as is">Okay, cool it with the spaces!</span><br>
+                <input id="noSpaces" name="spaces" type="radio"> I don't want any spaces at all<br>
+            </div>
+            <button id="convert" type="submit" onclick="convert()">Convert / Remwocd</button><br>
+        </div>
+        <div id="footer">
+            <img src="./images/gaim_emblems.png" alt="Kamen Rider Gaim's Emblem"/>
+            <p class="credits">
+                Credits:<br>
+                Ralph for <a href="http://aesirsubs.wordpress.com/2014/04/21/kamen-rider-gaim-26/#comment-4318">posting the cipher</a><br>
+                Nac129 for <a href="http://nac129.deviantart.com/art/Kamen-Rider-Gaim-Logo-389897478">Gaim's logo</a><br>
+                AnotherAizen14 for <a href="http://www.deviantart.com/art/Kamen-Rider-Gaim-Symbol-Vector-482682549">Kamen Rider Emblems</a><br>
+                "Let's share a html page on dropbox" person
+            </p>
+        </div>
+    </div>
+</body>
+</html>
